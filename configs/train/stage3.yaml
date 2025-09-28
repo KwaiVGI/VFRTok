@@ -1,0 +1,83 @@
+# model
+image_size: 256
+period: 0.6666666666667
+num_frames: 16
+variable_num_frames: true
+model: AE-16
+enc_type: vit
+dec_type: vit
+codebook_embed_dim: 32
+num_latent_tokens: 512
+base_image_size: 256
+encoder_model: vit_base_patch14_dinov2.lvd142m
+decoder_model: vit_base_patch14_dinov2.lvd142m
+encoder_tuning_method: full
+decoder_tuning_method: full
+encoder_pretrained: false
+decoder_pretrained: false
+encoder_patch_size: 8
+decoder_patch_size: 8
+t_patch_size: 4
+dec_seperate_mask_token: false
+rope_mixed: false
+rope_heads: 6
+rope_theta: 10000.0
+rope_theta_t: 10000.0
+to_pixel: linear
+use_ape: false
+use_rope: true
+
+# loss
+reconstruction_weight: 1.0
+reconstruction_loss: l1
+perceptual_weight: 1.0
+perceptual_loss: vgg
+perceptual_model: vgg
+perceptual_dino_variants: depth12_no_train
+perceptual_intermediate_loss: false
+perceptual_logit_loss: false
+perceptual_resize: false
+perceptual_warmup: 1
+disc_weight: 0.2
+disc_start: 1
+disc_dim: 64
+disc_type: dino
+disc_loss: hinge
+gen_loss: hinge
+lecam_loss_weight: 0.001
+use_diff_aug: true
+disc_cr_loss_weight: 4.0
+disc_adaptive_weight: true
+dropout_p: 0.0
+
+# data
+dataset: k600
+data_column: video_path
+data_path_list: [
+  data/k600_24fps.csv,
+  data/k600_30fps.csv, 
+  data/BVI_HFR.csv,
+  data/BVI_HFR.csv
+]
+fps_list: [24, 30, 60, 120]
+fps_weight: [10, 100, 5, 5]
+val_data_path_list: [
+  data/k600_val.csv,
+  data/k600_val.csv,
+  data/k600_val.csv,
+  data/k600_val.csv,
+]
+val_fps_list: [30, 24, 15, 10]
+
+# train
+model_ckpt: STAGE2/checkpoints/model_0200000/pytorch_model.bin
+disc_ckpt:  STAGE2/checkpoints/disc_0200000/pytorch_model.bin
+max_train_steps: 500000
+epochs: 100
+mix_fps: true
+mix_fps_rate: 0.5
+global_seed: 42
+num_workers: 16
+log_every: 50
+val_every: 5000
+ckpt_every: 5000
